@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:flame_hello/example02-squares/life_bar.dart';
 import 'package:flame_hello/example02-squares/square_game.dart';
 import 'package:flame_hello/example02-squares/utils.dart';
 import 'package:flutter/material.dart';
@@ -15,59 +16,28 @@ class Square extends PositionComponent with HasGameReference<SquareGame> {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2;
 
-  List<RectangleComponent> lifeBarElements = List<RectangleComponent>.filled(
-    3,
-    RectangleComponent(size: Vector2(1, 1)),
-    growable: false,
-  );
+  late LifeBar _lifeBar;
 
   @override
   FutureOr<void> onLoad() {
     super.onLoad();
     size.setValues(squareSize, squareSize);
     anchor = Anchor.center;
-    createLifeBar();
+    _createLifeBar();
   }
 
-  createLifeBar() {
-    final lifeBarSize = Vector2(40, 10);
-    final backgroundFillColor =
-        Paint()
-          ..color = Colors.grey.withAlpha(80)
-          ..style = PaintingStyle.fill;
-    final outlineColor =
-        Paint()
-          ..color = Colors.white
-          ..style = PaintingStyle.stroke;
-    final lifeDangerColor =
-        Paint()
-          ..color = Colors.red
-          ..style = PaintingStyle.fill;
-    lifeBarElements = [
-      // Fill
-      RectangleComponent(
-        position: Vector2(size.x - lifeBarSize.x, -lifeBarSize.y - 2),
-        size: lifeBarSize,
-        angle: 0,
-        paint: backgroundFillColor,
-      ),
-      // Life left
-      RectangleComponent(
-        position: Vector2(size.x - lifeBarSize.x, -lifeBarSize.y - 2),
-        size: Vector2(10, lifeBarSize.y),
-        angle: 0,
-        paint: lifeDangerColor,
-      ),
-      // Outline
-      RectangleComponent(
-        position: Vector2(size.x - lifeBarSize.x, -lifeBarSize.y - 2),
-        size: lifeBarSize,
-        angle: 0,
-        paint: outlineColor,
-      ),
-    ];
+  void _createLifeBar() {
+    _lifeBar = LifeBar.initData(
+      size,
+      size: Vector2(size.x - 10, 5),
+      placement: LifeBarPlacement.center,
+    );
 
-    addAll(lifeBarElements);
+    add(_lifeBar);
+  }
+
+  void processHit() {
+    _lifeBar.decrementCurrentLifeBy(10);
   }
 
   @override

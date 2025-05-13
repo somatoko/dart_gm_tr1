@@ -21,6 +21,8 @@ class SquareGame extends FlameGame with DoubleTapDetector, TapDetector {
     final touchPoint = info.eventPosition.global;
     final handled = children.any((component) {
       if (component is Square && component.containsPoint(touchPoint)) {
+        // remove(component);
+        component.processHit();
         component.velocity.negate();
         return true;
       }
