@@ -1,47 +1,15 @@
-import 'dart:async';
-import 'dart:math';
-import 'package:flutter/painting.dart';
-import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
+import 'package:flutter/painting.dart';
 
-class Square extends PositionComponent {
-  var velocity = Vector2(0, 0).normalized() * 25;
-  var rotationSpeed = 0.3;
-  var squareSize = 128.0;
-  var color =
-      BasicPalette.white.paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2;
-
-  @override
-  FutureOr<void> onLoad() {
-    super.onLoad();
-    size.setValues(squareSize, squareSize);
-    anchor = Anchor.center;
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    position += velocity * dt;
-    var angleDelta = dt * rotationSpeed;
-    angle = (angle + angleDelta) % (2 * pi);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    canvas.drawRect(size.toRect(), color);
-  }
-}
+import 'square.dart';
 
 class SquareGame extends FlameGame with DoubleTapDetector, TapDetector {
   bool running = true;
 
-  @override
-  bool get debugMode => false;
+  // @override
+  // bool get debugMode => false;
 
   final TextPaint textPaint = TextPaint(
     style: const TextStyle(fontSize: 14.0, fontFamily: 'Awesome Font'),
